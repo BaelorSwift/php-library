@@ -94,15 +94,19 @@ class BaelorAPI
         if ($body instanceof Stream) {
             $body = $body->getContents();
         }
-        $resultType = $this->lastMethod->getName();
-        $result = new Result($body, $resultType);
+        if(!is_null($this->lastMethod)) {
+            $resultType = $this->lastMethod->getName();
+            $result = new Result($body, $resultType);
+        } else {
+            $result = new Result($body);
+        }
 
         return $result;
     }
 
     private function checkCallCount()
     {
-        if($this->remainingCalls <= 1) {
+        if($this->remainingCalls <= 0) {
             throw new BaeAPIOverloadException('You have hit the limit for this API key.');
         }
     }
@@ -110,8 +114,12 @@ class BaelorAPI
     private function populateHeaders(Response $response)
     {
         $headers = $response->getHeaders();
-        $this->rateLimit = intval($headers['X-RateLimit-Limit'][0]);
-        $this->remainingCalls = intval($headers['X-RateLimit-Remaining'][0]);
+        if(isset($headers['X-RateLimit-Remaining'])) {
+            $this->rateLimit = intval($headers['X-RateLimit-Limit'][0]);
+            $this->remainingCalls = intval($headers['X-RateLimit-Remaining'][0]);
+        } else {
+            $this->remainingCalls = 1;
+        }
     }
 
 }
