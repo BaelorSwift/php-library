@@ -3,18 +3,17 @@
 require_once('vendor/autoload.php');
 
 ### TODO in order
-# Lyrics
-# - Lyric Functions
-# Images
+# Images(?)
 # TestSuite (PHPSpec/PHPUnit)
 # Documentation
 ###
 
 use Duffleman\baelor\BaelorAPI;
+use Duffleman\baelor\Results\Lyrics;
 
-$api = new BaelorAPI();
-$details = $api->login('bae@duffleman.co.uk', 'aReallySecretPassword');
+$api = new BaelorAPI('{API-HERE}');
 
-$resource = $api->getAlbums()->albums->toArray();
+$song = $api->getSongs('shake-it-off');
+$lyrics = new Lyrics($song, $api);
 
-dd($resource);
+echo($lyrics->toHTML());

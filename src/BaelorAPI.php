@@ -1,7 +1,9 @@
 <?php namespace Duffleman\baelor;
 
 use Duffleman\baelor\Exceptions\BaeAPIOverloadException;
+use Duffleman\baelor\Exceptions\InvalidBaePIException;
 use Duffleman\baelor\Results\ResultParser;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
@@ -61,7 +63,7 @@ class BaelorAPI {
         return new MagicMethod($methodName);
     }
 
-    private function prepareRequest($method, $endpoint, $headers = [])
+    public function prepareRequest($method, $endpoint, $headers = [])
     {
         $endpoint = $this->base_url . $endpoint;
         $this->currentRequest = $this->guzzle->createRequest($method, $endpoint, $headers);
@@ -85,9 +87,13 @@ class BaelorAPI {
         $this->currentRequest->setBody($body);
     }
 
-    private function process()
+    public function process()
     {
-        $response = $this->guzzle->send($this->currentRequest);
+        try {
+            $response = $this->guzzle->send($this->currentRequest);
+        } catch (Exception $exception) {
+            throw new InvalidBaePIException('Unable to process request.');
+        }
         $this->populateHeaders($response);
 
         $this->checkCallCount();
