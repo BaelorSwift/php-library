@@ -1,7 +1,10 @@
 {
     "name": "Duffleman/baelorphp",
     "description": "PHP Wrapper for baelor.io API",
-    "keywords": ["baelor", "swift"],
+    "keywords": [
+        "baelor",
+        "swift"
+    ],
     "authors": [
         {
             "name": "George Miller",
@@ -10,9 +13,17 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "guzzlehttp/guzzle": "~5.0"
+        "guzzlehttp/guzzle": "~5.0",
+        "illuminate/support": "~5.0"
+    },
+    "require-dev": {
+        "symfony/debug": "2.6.*",
+        "symfony/var-dumper": "2.6.*"
     },
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "Duffleman\\baelor\\": "src/"
         }

@@ -1,20 +1,16 @@
 <?php
 
-require('vendor/autoload.php');
+require_once('vendor/autoload.php');
 
 ### TODO in order
 # Lyrics
 # - Lyric Functions
 # Images
-# Refactoring
 # TestSuite (PHPSpec/PHPUnit)
 # Documentation
 ###
 
 use Duffleman\baelor\BaelorAPI;
 
-$api = new BaelorAPI('{API-HERE}');
-
-$resource = $api->getAlbums();
-
-die(var_dump($resource));
+$api = new BaelorAPI();
+$details = $api->login('bae@duffleman.co.uk', 'aReallySecretPassword');

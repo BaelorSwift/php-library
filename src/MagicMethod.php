@@ -1,10 +1,8 @@
 <?php namespace Duffleman\baelor;
 
+use Duffleman\baelor\Exceptions\InvalidBaeMethodNameException;
 
-use Duffleman\baelor\Exceptions\InvalidMethodNameException;
-
-class MagicMethod
-{
+class MagicMethod {
 
     protected $catchers = [
         'get',
@@ -31,8 +29,8 @@ class MagicMethod
             }
         }
 
-        if (!$foundType) {
-            throw new InvalidMethodNameException($methodName . ' is not a valid method name.');
+        if ( !$foundType) {
+            throw new InvalidBaeMethodNameException($methodName . ' is not a valid method name.');
         }
 
         if (substr($methodName, 0, strlen($this->methodType)) == $this->methodType) {
@@ -57,5 +55,14 @@ class MagicMethod
     public function getName()
     {
         return $this->methodName;
+    }
+
+    public function getClass()
+    {
+        $className = $this->getName();
+        $className = rtrim($className, 's');
+        $className = strtolower(ucwords($className));
+
+        return $className;
     }
 }

@@ -1,12 +1,12 @@
 <?php namespace Duffleman\baelor;
 
 use Duffleman\baelor\Exceptions\BaeAPIOverloadException;
+use Duffleman\baelor\Results\ResultParser;
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 
-class BaelorAPI
-{
+class BaelorAPI {
 
     protected $guzzle;
     protected $base_url = 'https://baelor.io/api/v0/';
@@ -30,8 +30,9 @@ class BaelorAPI
 
         $method = $this->convertName($method);
         $this->lastMethod = $method;
+
         $urlExtension = '';
-        if (!empty($params)) {
+        if ( !empty($params)) {
             $urlExtension = '/';
             $urlExtension .= implode('/', $params);
         }
@@ -51,6 +52,7 @@ class BaelorAPI
         ]);
         $result = $this->process();
         $this->key = $result->api_key;
+
         return $result;
     }
 
@@ -70,7 +72,7 @@ class BaelorAPI
             $this->currentRequest->setHeader($key, $value);
         }
 
-        if (!empty($this->key)) {
+        if ( !empty($this->key)) {
             $this->currentRequest->addHeader('Authorization', 'bearer ' . $this->key);
         }
 
@@ -90,23 +92,15 @@ class BaelorAPI
 
         $this->checkCallCount();
 
-        $body = $response->getBody();
-        if ($body instanceof Stream) {
-            $body = $body->getContents();
-        }
-        if(!is_null($this->lastMethod)) {
-            $resultType = $this->lastMethod->getName();
-            $result = new Result($body, $resultType);
-        } else {
-            $result = new Result($body);
-        }
+        $body = $response->getBody()->getContents();
+        $result = ResultParser::build($body, $this->lastMethod);
 
         return $result;
     }
 
     private function checkCallCount()
     {
-        if($this->remainingCalls <= 0) {
+        if ($this->remainingCalls <= 0) {
             throw new BaeAPIOverloadException('You have hit the limit for this API key.');
         }
     }
@@ -114,12 +108,11 @@ class BaelorAPI
     private function populateHeaders(Response $response)
     {
         $headers = $response->getHeaders();
-        if(isset($headers['X-RateLimit-Remaining'])) {
+        if (isset($headers['X-RateLimit-Remaining'])) {
             $this->rateLimit = intval($headers['X-RateLimit-Limit'][0]);
             $this->remainingCalls = intval($headers['X-RateLimit-Remaining'][0]);
         } else {
             $this->remainingCalls = 1;
         }
     }
-
 }
