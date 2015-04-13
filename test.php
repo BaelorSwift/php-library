@@ -14,3 +14,7 @@ use Duffleman\baelor\BaelorAPI;
 
 $api = new BaelorAPI();
 $details = $api->login('bae@duffleman.co.uk', 'aReallySecretPassword');
+
+$resource = $api->getAlbums()->albums->toArray();
+
+dd($resource);

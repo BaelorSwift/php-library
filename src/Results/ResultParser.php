@@ -39,6 +39,8 @@ class ResultParser {
         if (isset($resultSet->album_cover)) {
             return 'Album';
         }
+
+        return 'Generic';
     }
 
     private static function convertJsonToObject($resultSet)

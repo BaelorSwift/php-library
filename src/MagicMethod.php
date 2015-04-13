@@ -61,7 +61,7 @@ class MagicMethod {
     {
         $className = $this->getName();
         $className = rtrim($className, 's');
-        $className = strtolower(ucwords($className));
+        $className = ucwords(strtolower($className));
 
         return $className;
     }
