@@ -2,11 +2,31 @@
 
 use Illuminate\Support\Collection;
 
+/**
+ * Custom collection set. Contains a collection of items.
+ *
+ * Class CollectionSet
+ * @package Duffleman\baelor\Results
+ */
 class CollectionSet {
 
+    /**
+     * The collection itself.
+     *
+     * @var Collection
+     */
     protected $set;
+    /**
+     * What type of set is inside this collection?
+     *
+     * @var null
+     */
     protected $type;
 
+    /**
+     * @param      $arraySet
+     * @param null $type
+     */
     public function __construct($arraySet, $type = null)
     {
         $this->type = $type;
@@ -22,6 +42,12 @@ class CollectionSet {
         }
     }
 
+    /**
+     * Getter for the variables within the set.
+     *
+     * @param $variable
+     * @return Collection
+     */
     public function __get($variable)
     {
         if ($variable === $this->type) {

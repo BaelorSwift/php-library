@@ -2,12 +2,6 @@
 
 require_once('vendor/autoload.php');
 
-### TODO in order
-# Images(?)
-# TestSuite (PHPSpec/PHPUnit)
-# Documentation
-###
-
 use Duffleman\baelor\BaelorAPI;
 use Duffleman\baelor\Results\Lyrics;
 
