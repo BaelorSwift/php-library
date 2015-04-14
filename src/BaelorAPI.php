@@ -130,6 +130,30 @@ class BaelorAPI {
     }
 
     /**
+     * Creates a user.
+     *
+     * @param $username
+     * @param $email
+     * @param $password
+     * @return \Duffleman\baelor\Results\CollectionSet
+     * @throws \Duffleman\baelor\Exceptions\InvalidBaePIException
+     * @throws \Duffleman\baelor\Exceptions\UnauthorizedBaeException
+     */
+    public function createUser($username, $email, $password)
+    {
+        $this->prepareRequest('post', 'users');
+        $this->attachPayload([
+            'username'         => $username,
+            'email_address'    => $email,
+            'password'         => $password,
+            'password_confirm' => $password
+        ]);
+        $user = $this->process();
+
+        return $user;
+    }
+
+    /**
      * Quick accessor to the MagicMethod class.
      *
      * @param $methodName
@@ -190,8 +214,8 @@ class BaelorAPI {
     {
         try {
             $response = $this->guzzle->send($this->currentRequest);
-        } catch(ClientException $exception) {
-            if($exception->getCode() == 403) {
+        } catch (ClientException $exception) {
+            if ($exception->getCode() == 403) {
                 throw new UnauthorizedBaeException('API needs authentication.');
             }
         } catch (Exception $exception) {
