@@ -80,7 +80,7 @@ $api = new BaelorAPI('api-key');
 
 $album = $api->getAlbums('1989');
 
-$songs = $album->songs;
+$songs = $album->attributes;
 ```
 
 ### All songs
