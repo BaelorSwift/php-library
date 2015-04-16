@@ -3,6 +3,7 @@
 use Duffleman\baelor\Exceptions\BaeAPIOverloadException;
 use Duffleman\baelor\Exceptions\InvalidBaePIException;
 use Duffleman\baelor\Exceptions\UnauthorizedBaeException;
+use Duffleman\baelor\Results\Generic;
 use Duffleman\baelor\Results\ResultParser;
 use Exception;
 use GuzzleHttp\Client;
@@ -205,7 +206,6 @@ class BaelorAPI {
     /**
      * Sends the actual request to baelor.io
      *
-     * @return \Duffleman\baelor\Results\CollectionSet
      * @throws \Duffleman\baelor\Exceptions\BaeAPIOverloadException
      * @throws \Duffleman\baelor\Exceptions\InvalidBaePIException
      * @throws \Duffleman\baelor\Exceptions\UnauthorizedBaeException
@@ -218,15 +218,19 @@ class BaelorAPI {
             if ($exception->getCode() == 403) {
                 throw new UnauthorizedBaeException('API needs authentication.');
             }
+            throw new InvalidBaePIException('Unknown API error.');
         } catch (Exception $exception) {
             throw new InvalidBaePIException('Unable to process request.');
         }
+
         $this->populateHeaders($response);
 
         $this->checkCallCount();
 
         $body = $response->getBody()->getContents();
-        $result = ResultParser::build($body, $this->lastMethod);
+
+        $result = json_decode($body);
+        $result = new Generic($result);
 
         return $result;
     }

@@ -1,6 +1,7 @@
 <?php namespace Duffleman\baelor\Results;
 
 use Duffleman\baelor\BaelorAPI;
+use Duffleman\baelor\Exceptions\MissingBaeriableException;
 use Illuminate\Support\Collection;
 
 /**
@@ -34,10 +35,12 @@ class Lyrics {
      * @param \Duffleman\baelor\Results\Song $song
      * @param \Duffleman\baelor\BaelorAPI    $bae
      */
-    public function __construct(Song $song, BaelorAPI $bae)
+    public function __construct($song, BaelorAPI $bae)
     {
         $this->song = $song;
         $this->bae = $bae;
+
+        $this->validateSong();
 
         $this->grab();
     }
@@ -111,7 +114,7 @@ class Lyrics {
      * @param bool $stripBlanks
      * @return array
      */
-    public function toArray($stripBlanks = false)
+    public function toArray($stripBlanks = true)
     {
         $lines = explode("\n", $this->raw);
 
@@ -122,5 +125,12 @@ class Lyrics {
         $lines = array_filter($lines);
 
         return $lines;
+    }
+
+    private function validateSong()
+    {
+        if(!isset($this->song->slug)) {
+            throw new MissingBaeriableException('This song needs a slug!');
+        }
     }
 } 
