@@ -78,9 +78,9 @@ class BaelorAPI {
      *
      * @param       $method
      * @param array $params
-     * @return \Duffleman\baelor\Results\CollectionSet
      * @throws \Duffleman\baelor\Exceptions\InvalidBaePIException
      * @throws \Duffleman\baelor\Exceptions\UnauthorizedBaeException
+     * @internal param $metho
      */
     public function __call($method, $params = [])
     {
@@ -109,11 +109,11 @@ class BaelorAPI {
     }
 
     /**
-     * Special login function. Login with your username/email and password.
+     * Special function to handle login.
      *
      * @param $identity
      * @param $password
-     * @return \Duffleman\baelor\Results\CollectionSet
+     * @return \Duffleman\baelor\Results\Generic|mixed
      * @throws \Duffleman\baelor\Exceptions\InvalidBaePIException
      * @throws \Duffleman\baelor\Exceptions\UnauthorizedBaeException
      */
@@ -131,12 +131,10 @@ class BaelorAPI {
     }
 
     /**
-     * Creates a user.
-     *
      * @param $username
      * @param $email
      * @param $password
-     * @return \Duffleman\baelor\Results\CollectionSet
+     * @return \Duffleman\baelor\Results\Generic|mixed
      * @throws \Duffleman\baelor\Exceptions\InvalidBaePIException
      * @throws \Duffleman\baelor\Exceptions\UnauthorizedBaeException
      */
